@@ -1,0 +1,55 @@
+from tkinter import filedialog, font
+from tkinter import *
+import os
+from pygame import mixer
+
+root = Tk()
+root.title("VOICE")
+listbox = Listbox(width=60,height=20, bg='bisque',borderwidth=10,font='italic')
+paused = False
+
+def load():
+    directory = filedialog.askdirectory()
+    os.chdir(str(directory))
+    song_list = os.listdir()
+    pos = 1
+
+    for song in song_list:
+        listbox.insert(pos,song)
+        pos += 1
+    
+def play ():
+    mixer.init()
+    mixer.music.load(listbox.get(listbox.curselection()))
+    mixer.music.play()
+
+def pause():
+    global paused
+
+    if paused == False:
+        mixer.music.pause()
+        paused = True
+
+    elif paused == True:
+        mixer.music.unpause()
+        paused = False
+
+def stop():
+    mixer.music.stop()
+
+load_button = Button(text = "Load",width="20",font=('bold',15),bg="cyan",fg='midnightblue',command=load,borderwidth=10)
+load_button.pack(side = "bottom")
+
+play_button = Button(text = "Play",width="20",font=('bold',15),bg="yellow",fg='saddlebrown',command=play,borderwidth=10)
+play_button.pack(side = "bottom")
+
+pause_button = Button(text = "Pause/Resume",width="20",font=('bold',15),bg="springgreen",fg='darkgreen',command=pause,borderwidth=10)
+pause_button.pack(side = "bottom")
+
+stop_button = Button(text = "Stop",width="20",font=('bold',15),bg="violet",fg='indigo',command=stop,borderwidth=10)
+stop_button.pack(side = "bottom")
+
+listbox.pack(side="left")
+
+
+root.mainloop()
